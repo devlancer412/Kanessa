@@ -453,7 +453,9 @@ const MintPage = () => {
       const data = await getWhiteListInfo(address);
       console.log(address);
 
-      setProof(data.proof);
+      if (data.verified) {
+        setProof(data.proof);
+      }
       setVerified(data.verified);
 
       setContract(contract);
