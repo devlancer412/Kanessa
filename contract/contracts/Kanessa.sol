@@ -21,7 +21,7 @@ contract Kanessa is ERC721, Ownable {
     event MintNFT(address indexed _to, uint256 _number);
 
     constructor() ERC721("Kanessa(Plus size lady)", "PSL") {
-        _root = 0xb61a434330b5956117e2e80034ecd767041666f59bb627bfd46d8c01f1a7f70b;
+        _root = 0x7036c18b7148a5450c499d5c83cf6dac05902701bbbca399f37345095ecf0dcb;
         _strBaseTokenURI = "https://gateway.pinata.cloud/ipfs/Qmdbpbpy7fA99UkgusTiLhMWzyd3aETeCFrz7NpYaNi6zY/";
         _whitelistActive = true;
     }
@@ -34,8 +34,8 @@ contract Kanessa is ERC721, Ownable {
         return 1000;
     }
 
-    function price(bool verified) public view returns (uint256) {
-        if (verified && _whitelistActive) {
+    function price() public view returns (uint256) {
+        if (_whitelistActive) {
             return 2 * 10**16;
         }
 
@@ -76,8 +76,8 @@ contract Kanessa is ERC721, Ownable {
     }
 
     function payToMint(address recipiant, uint256 number) public payable {
-        require(!_whitelistActive, "Can't mint in presale!");
-        require(msg.value >= price(false) * number, "Need to pay up!");
+        require(!_whitelistActive, "Public mint is not started yet!");
+        require(msg.value >= price() * number, "Need to pay up!");
 
         for (uint256 i = 0; i < number; i++) {
             uint256 newItemid = _tokenIdCounter.current();
@@ -94,13 +94,13 @@ contract Kanessa is ERC721, Ownable {
         bytes32[] memory proof,
         uint256 number
     ) public payable {
-        require(_whitelistActive, "Finished presale!");
+        require(_whitelistActive, "Presale is not suppoted!");
 
         bool isWhitelisted = verifyWhitelist(_leaf(recipiant), proof);
 
         require(isWhitelisted, "Not whitelisted");
 
-        require(msg.value >= price(true) * number, "Need to pay up!");
+        require(msg.value >= price() * number, "Need to pay up!");
 
         for (uint256 i = 0; i < number; i++) {
             uint256 newItemid = _tokenIdCounter.current();
@@ -155,7 +155,7 @@ contract Kanessa is ERC721, Ownable {
         return _root;
     }
 
-    function setWhitelistRoot(bytes32 root) external {
+    function setWhitelistRoot(bytes32 root) external onlyOwner {
         _root = root;
     }
 
@@ -163,7 +163,7 @@ contract Kanessa is ERC721, Ownable {
         return _whitelistActive;
     }
 
-    function setWhiteListMode(bool mode) external {
+    function setWhiteListMode(bool mode) external onlyOwner {
         _whitelistActive = mode;
 
         emit WhitelistModeChanged(mode);

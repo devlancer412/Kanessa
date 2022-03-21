@@ -16,7 +16,7 @@ import contractAbi from "../artifacts/contracts/Kanessa.sol/Kanessa.json";
 import getWhiteListInfo from "../utils/whitelist";
 import DisconnectBtn from "../components/DisconnectBtn";
 
-const contractAddress = "0x83f664767b8A965001760ac421802E95c52a9039";
+const contractAddress = "0xe7e1E461EE15A76B651E4ff3fAe1041c941ce298";
 
 const MintContainer = styled.section`
   background: #dfb77a;
@@ -137,6 +137,7 @@ const FromTitle = styled.h1`
   font-size: 60px;
   line-height: 126.8%;
   @media only screen and (max-width: 560px) {
+    font-weight: 700;
     font-size: 30px;
   }
 `;
@@ -322,7 +323,8 @@ const Ribbon = styled.img`
   bottom: ${(props) => (props.bottom ? props.bottom : "")};
   z-index: 2;
   @media only screen and (max-width: 450px) {
-    display: none;
+    display: ${(props) => (props.minihidden ? "none" : "block")};
+    transform: scale(0.8);
   }
 `;
 
@@ -396,7 +398,7 @@ const MintPage = () => {
   const [price, setPrice] = useState(0);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [qmessage, setQMessage] = useState("");
   const [provider, setProvider] = useState(null);
   const [web3modal, setWeb3modal] = useState(null);
   const [balance, setBalance] = useState(0);
@@ -417,7 +419,12 @@ const MintPage = () => {
     }
   };
 
-  const sendMsg = () => {};
+  const sendMsg = () => {
+    setEmail("");
+    setFullName("");
+    setQMessage("");
+    toast("Successfully sended!");
+  };
 
   const handleWalletConnect = async () => {
     try {
@@ -472,11 +479,7 @@ const MintPage = () => {
         )
       );
 
-      setPrice(
-        parseFloat(
-          ethers.utils.formatEther(await contract.price(data.verified))
-        )
-      );
+      setPrice(parseFloat(ethers.utils.formatEther(await contract.price())));
     } catch (err) {
       const errStr = JSON.stringify(err);
       console.log(errStr);
@@ -526,7 +529,12 @@ const MintPage = () => {
   return (
     <MintContainer>
       <MintPanel>
-        <Ribbon src="/assets/images/LTDots.png" top="-53px" left="-53px" />
+        <Ribbon
+          src="/assets/images/LTDots.png"
+          top="-53px"
+          left="-53px"
+          minihidden
+        />
         <LeftForm>
           <FromTitle>Mint your Plus size ladies NFT</FromTitle>
           <CounterStr>
@@ -545,7 +553,12 @@ const MintPage = () => {
           <MintBtn onClick={mintNow}>Mint now</MintBtn>
         </LeftForm>
         <RightView>
-          <Ribbon src="/assets/images/RTGrid.png" top="-35px" right="-35px" />
+          <Ribbon
+            src="/assets/images/RTGrid.png"
+            top="-35px"
+            right="-35px"
+            minihidden
+          />
           <Ribbon src="/assets/images/LTRibbon.png" left="60px" top="-45px" />
           <Ribbon src="/assets/images/Dot.png" left="-26px" bottom="168px" />
           <Ribbon src="/assets/images/RB.png" right="-18px" bottom="-27px" />
@@ -581,8 +594,8 @@ const MintPage = () => {
             />
             <QueryText
               placeholder="Write a message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={qmessage}
+              onChange={(e) => setQMessage(e.target.value)}
             />
             <SendMsgBtn onClick={sendMsg}>send message</SendMsgBtn>
           </QueryForm>

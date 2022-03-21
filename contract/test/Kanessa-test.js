@@ -17,7 +17,7 @@ describe("Kanessa", function () {
     let balance = await kanessa.balanceOf(recipient);
     expect(balance).to.equal(0);
 
-    const count = await kanessa.price(true);
+    const count = await kanessa.price();
     console.log(count);
 
     console.log(ethers.utils.parseEther("0.05"));
