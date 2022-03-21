@@ -76,6 +76,7 @@ contract Kanessa is ERC721, Ownable {
     }
 
     function payToMint(address recipiant, uint256 number) public payable {
+        require(_tokenIdCounter.current() <= totalCount(), "All NFT minted!");
         require(!_whitelistActive, "Public mint is not started yet!");
         require(msg.value >= price() * number, "Need to pay up!");
 
@@ -94,6 +95,7 @@ contract Kanessa is ERC721, Ownable {
         bytes32[] memory proof,
         uint256 number
     ) public payable {
+        require(_tokenIdCounter.current() <= totalCount(), "All NFT minted!");
         require(_whitelistActive, "Presale is not suppoted!");
 
         bool isWhitelisted = verifyWhitelist(_leaf(recipiant), proof);
