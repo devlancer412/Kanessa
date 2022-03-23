@@ -16,7 +16,7 @@ import contractAbi from "../artifacts/contracts/Kanessa.sol/Kanessa.json";
 import getWhiteListInfo from "../utils/whitelist";
 import DisconnectBtn from "../components/DisconnectBtn";
 
-const contractAddress = "0xe7e1E461EE15A76B651E4ff3fAe1041c941ce298";
+const contractAddress = "0x7dF90000Ee96ba38BfB79392cDF9A373D0132Ab3";
 
 const MintContainer = styled.section`
   background: #dfb77a;
@@ -498,7 +498,7 @@ const MintPage = () => {
       }
 
       let result;
-      if (verified) {
+      if (verified && (await contract.whitelistMode())) {
         result = await contract.payToWhiteMint(address, proof, count, {
           value: ethers.utils.parseEther(price.toString()).mul(count),
         });
