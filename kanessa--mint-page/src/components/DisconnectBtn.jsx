@@ -25,6 +25,13 @@ const DCBtn = styled.div`
     cursor: pointer;
     opacity: 0.9;
   }
+  @media only screen and (max-width: 750px) {
+    right: 50px;
+  }
+  @media only screen and (max-width: 540px) {
+    left: 50px;
+    top: 100px;
+  }
 `;
 
 const EtherIcon = styled.img`

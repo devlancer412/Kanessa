@@ -29,7 +29,6 @@ const ChangeBtn = styled.a`
   font-size: 27px;
   line-height: 37px;
   margin: 0 28.47px;
-  top: 20.82px;
   left: ${(props) => (props.left ? "0px;" : "")};
   right: ${(props) => (props.right ? "0px;" : "")};
   border: transparent solid 1px;
